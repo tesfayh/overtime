@@ -1,0 +1,178 @@
+
+<div class="content">
+<div class="wrapper">
+<div class="panel">
+	<h1>Employee's Name_________________<u><%= link_to current_user.name, '/overtimes'%></u>_________________________________________________________ </h1>
+ 
+<table border="1">
+  <tr>
+    <th rowspan="4" bgcolor="grey">S.No</th>
+    <th rowspan="4" bgcolor="grey">Day</th>
+    <th rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th rowspan="4" bgcolor="grey">Period of Time(Range of Time)</th>
+    <th rowspan="4" bgcolor="grey">Total No of Hours Worked</th>
+    <th colspan="4" >Distribution of Worked Time(OT Ratio)</th>
+    <th rowspan="4" bgcolor="grey">Signature of the employee</th>
+    <th rowspan="4" bgcolor="grey">Remark</th>
+    </tr>
+    <tr>
+        
+        <th bgcolor="grey">Evening</th>
+        <th bgcolor="grey">Night</th>
+        <th bgcolor="grey">weekend</th>
+        <th bgcolor="grey">Holidays</th>
+        
+    </tr>
+    <tr>
+      
+      <th bgcolor="grey">5p.m-10p.m</th>
+      <th bgcolor="grey">10.p.m-6a.m</th>
+      <th bgcolor="grey"> 8a.m-6a.m</th>
+      <th bgcolor="grey">8a.m-6a.m</th>
+      
+    </tr>
+    <tr>
+      
+      <th bgcolor="grey">1.25</th>
+      <th bgcolor="grey">1.50</th>
+      <th bgcolor="grey">2.00</th>
+      <th bgcolor="grey">2.50</th>
+     
+    </tr>
+    <% totalh = 0 %>    <% nightm = 0 %>     <% weekendh = 0 %>
+    <% weekendm = 0 %>  <% weekday  = '' %>  <% totalm = 0 %>
+    <% eveningh = 0 %>  <% nighth = 0 %>     <% date = ''     %>
+    <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
+    <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
+
+<% t1 = Time.parse(Time.now.to_s) %>
+ <% days = Time.days_in_month(t1.month, t1.year) %>
+<% for i in 1..days %>
+<% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
+       <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
+    <% @reports.each do |ots| %>
+
+      
+
+
+      <% t2 = Time.parse(ots.sdayofot.to_s) %>
+      <% if t2.month == t1.month %>
+         <% if i < 10 && t1.month < 10%>
+           <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
+         <% elsif i < 10 %>
+             <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
+          <% elsif t1.month < 10 %>
+             <% date = "#{i} - 0#{t1.month} - #{t1.year} " %>
+          <% end %>
+             <% date = date.to_date %>
+            <% date =  date.strftime("%d-%m-%Y") %>
+
+        <% if t2.day == i %>
+           
+          <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+           
+            <% if ots.stimeminutes >= 30 %>
+              <% stotalh = ots.stimehours +=1 %>
+           <% elsif ots.stimeminutes >= 15 %>
+
+              <% stotalh = ots.stimehours %>
+              <% stotalm = '1/2' %>
+              <% totalm = totalm + 0.5 %>
+           <% else %>
+              <% stotalh = ots.stimehours + 0 %>
+           <% end %>
+          
+           <% if ots.etimeminutes >= 30 %>
+              <% etotalh = ots.etimehours +=1 %>
+           <% elsif ots.etimeminutes >= 15 %>
+
+              <% etotalh = ots.etimehours  %>
+              <% etotalm = '1/2' %>
+              <% totalm = totalm + 0.5 %>
+                
+              <% if (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Saturday') !=0 &&
+                  (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Sunday') !=0 %>
+                    <% nightm = nightm + 0.5 %>
+              <% else%>
+                  <% weekendm = weekendm + 0.5 %>
+              <% end %>
+            <% else %>
+              <% etotalh = ots.etimehours + 0 %>
+            <% end %>
+            <% if etotalm==0 %>
+              <% etotalm = '' %>
+            <% end %>
+            <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
+            
+               <!-- total number of hours worked -->
+           
+                <% if ots.ETAP != ots.STAP %>
+                  <% etotalh = etotalh + 12 - stotalh  %>
+                  
+                <% else %>
+                   <% etotalh = etotalh - stotalh %> 
+                   
+                  
+                <% end %>
+              
+                <% totalh = totalh + etotalh %>
+            <% if (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Saturday') !=0 &&
+                  (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Sunday') !=0 %>
+                  <% eveningh = eveningh + 5 %>
+                  <% nighth = nighth + etotalh - 5 %>
+                 
+            
+                <% if etotalh >= 5 %> <% evening = 5 %> 
+                <% else %> <% evening = "#{etotalh} #{etotalm}" %> 
+                <% end %> 
+            
+              
+                 <% if etotalh >= 5 %>
+                 <% night = "#{etotalh - 5} #{etotalm}" %>
+                 <% end %>
+               
+            <% else %>
+              <% weekendh = weekendh + etotalh %>
+              <% weekend = "#{etotalh} #{etotalm}" %>
+            <% end %>
+            <% else %>
+                <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+               
+               
+
+        <% end %> 
+
+    <% end %>
+  <% end %>
+  <tr>
+    <td><%= i %></td>
+    <td><%= weekday %></td>
+    <td><%= date %></td>
+    <td><%= range %></td>
+    <td><% if etotalh !=0 %> <%= etotalh %> <% end %><% if etotalm != 0 %><%= etotalm %> <% end %></td>
+    <td><%= evening %></td>
+    <td><%= night %></td>
+    <td><%= weekend %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+<% end %>
+<tr>
+      <td colspan="4" >
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+      Total</td>
+      <td><%= totalh + totalm %></td>
+      <td><%= eveningh %></td>
+      <td><%= nighth + nightm %></td>
+      <td><%= weekendh + weekendm %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+  </tr>
+</table>
+	</div>
+	</div>
+</div>

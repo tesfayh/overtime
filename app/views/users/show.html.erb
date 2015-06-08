@@ -1,0 +1,15 @@
+<% if current_user %>
+<%= render 'ribbits/new_form' %>
+<% end %> 
+<div id="ribbits" class="panel left">
+	<h1> Ribbit Profile</h1>
+	<div class="ribbitwrapper">
+	
+	<span class="name"><%= @user.name %></span>@<%= @user.username %>
+
+</div>
+</div>
+<div class="panel left">
+	<h1> Ribbits</h1>
+	
+</div>

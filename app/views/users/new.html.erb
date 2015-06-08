@@ -1,0 +1,21 @@
+<img src="/gfx/LIBlogo1.jpeg" />
+<div class="panel right">
+	<h1> New To LIBOT System?</h1>
+	<p>
+		<%= form_for @user do |f| %>
+			<% if @user.errors.any? %>
+				<ul>
+					<% @user.errors.full_messages.each do |e| %>
+						<li><%= e %></li>
+					<% end %>
+				</ul>
+			<% end %>
+			<%= f.text_field :email, placeholder: "email" %>
+			<%= f.text_field :name, placeholder: "name" %>
+			<%= f.text_field :username, placeholder: "username" %>
+			<%=f.password_field :password,placeholder: "password" %>
+			<%= f.password_field :password_confirmation, placeholder: "password" %>
+			<%= f.submit "Create Account" %>
+		<% end %>
+	</p>
+</div>

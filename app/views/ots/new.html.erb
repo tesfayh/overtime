@@ -1,0 +1,24 @@
+
+<div class="content">
+<div class="wrapper">
+	<h1> Register your Over Time?</h1>
+	<p>
+		<%= form_for @ot do |f| %>
+			<% if @ot.errors.any? %>
+				<ul>
+					<% @ot.errors.full_messages.each do |e| %>
+						<li><%= e %></li>
+					<% end %>
+				</ul>
+			<% end %>
+			<%= form_for @ot do |f| %>
+			<%= check_box_tag(:pet_dog) %>
+			<%= label_tag(:pet_dog, "I own a dog") %>
+			<%= check_box_tag(:pet_cat) %>
+			<%= label_tag(:pet_cat, "I own a cat") %>
+		<% end %>
+			<%= f.submit "Save OT" %>
+		<% end %>
+	</p>
+	</div>
+</div>

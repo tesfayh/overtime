@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  startingtime: 1
+  endingtime: 1
+  ETAP: MyString
+  STAP: MyString
+  sdayofot: 2015-05-22
+  edayofot: 2015-05-22
+
+two:
+  startingtime: 1
+  endingtime: 1
+  ETAP: MyString
+  STAP: MyString
+  sdayofot: 2015-05-22
+  edayofot: 2015-05-22
