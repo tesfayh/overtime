@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lion Bank OT System</title>
+  <link rel="stylesheet/less" type="text/css" href="style.less" />
+  <script type="text/javascript" src="/less.js"></script>
+  <%= csrf_meta_tags %>
+</head>
+<body>
+<header>
+	<div class = "wrapper">
+	
+	 <span>LIB OT System</span>
+	<% if current_user %><br /> <br />
+	
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to "Add ",   'newot'%> &nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to "Update", 'update' %> &nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to "Report", 'Report' %> &nbsp;&nbsp;&nbsp;&nbsp;
+		<%= link_to 'Log Out', logout_path %>
+
+	 
+	 <% else %>
+	 <%= form_tag sessions_path do %>
+	 	<%= text_field_tag :username, nil, placeholder: "username" %>
+	 	<%= password_field_tag :password, nil, placeholder: "password" %>
+	 	<%= submit_tag "Log In" %>
+	 	<% end %>
+	 	<% end %> 
+		
+	</div>
+</header>
+<div id="content">
+	<div class="wrapper">
+		<% flash.each do |name, msg| %>
+		<%= content_tag :div, msg, class: "flash #{name}" %>
+		<% end %>
+		
+		<%= yield %>
+		
+		
+	</div>
+</div>
+<footer>
+	<div class="wrapper">
+		LIBOT - Lion Internation Bank<img src="/gfx/logo-nettuts.png">
+	</div>
+</footer>
+
+</body>
+</html>
