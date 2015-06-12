@@ -50,7 +50,7 @@
 
     
     <td><%= link_to "Edit", edit_overtime_path(ots) %></td>
-    <td><%= link_to "Remove",ots, method: :delete,
+    <td><%= button_to "Remove",ots, method: :delete,
                                   data: { confirm: "You sure?" }  %></td>
                                   
   </tr>
