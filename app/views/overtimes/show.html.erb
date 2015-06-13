@@ -2,61 +2,37 @@
 <div class="content">
 <div class="wrapper">
 <div class="panel">
-	<h1>LIB employees over time</h1>
- 
-<table border="1">
-  <tr>
-    <th>S.No</th>
-    <th>Day</th>
-    <th>Date</th>
-    <th>Period of Time</th>
-    <th>Total No of Hours Worked</th>
-    <th>Edit</th>
-    <th>Remove</th>
-  </tr>
-
-<% @overtimes.each.with_index do |ots, index| %>
-  <tr>
-  	<td> <%= index +1 %> </td>
-    <td><%= Date::DAYNAMES[ots.sdayofot.wday] %></td>
-    <td><%= ots.sdayofot.strftime("%d-%m-%y") %></td>
-     <% if ots.stimeminutes >= 30 %>
-      <% stotalh = ots.stimehours +=1 %>
-   <% elsif ots.stimeminutes >= 15 %>
-
-      <% stotalh = ots.stimehours %>
-      <% stotalm = '1/2' %>
-   <% else %>
-      <% stotalh = ots.stimehours + 0 %>
-   <% end %>
-   <% if ots.etimeminutes >= 30 %>
-      <% etotalh = ots.etimehours +=1 %>
-   <% elsif ots.etimeminutes >= 15 %>
-
-      <% etotalh = ots.etimehours  %>
-      <% etotalm = '1/2' %>
-    <% else %>
-      <% etotalh = ots.etimehours + 0 %>
-    <% end %>
-    <td><%= ots.stimehours %>  <%= ots.STAP %> - <%= ots.etimehours %><%= etotalm %>  <%= ots.ETAP %></td>
-    
-    <td>
-  
-    <% if ots.ETAP != ots.STAP %>
-       <%= etotalh + 12 - stotalh %> <%= etotalm %></td>
-    <% else %>
-       <%= etotalh - stotalh %> <%= etotalm %></td>
-       <% end %>
-
-    
-    <td><%= link_to "Edit", edit_overtime_path(ots) %></td>
-    <td><%= link_to "Remove",ots, method: :delete,
-                                  data: { confirm: "You sure?" }  %></td>
-                                  
-  </tr>
-  
-<% end %>
-</table>
+	<h1> Register your Over Time</h1>
+	<p>
+		<%= form_for @overtime do |f| %>
+			<% if @overtime.errors.any? %>
+				<ul>
+					<%= @overtime.errors.messages.values.each do |e| %>
+						<li><%= e %></li>
+					<% end %>
+				</ul>
+			<% end %>
+			
+			
+			<%= label_tag(:StartingTime, :StartingTime ) %><br />
+			<!--<%= label_tag(:StartingTime, :StartingTime ) %> -->
+			<%= f.select(:stimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n }, selected: 5)%> :
+			<%= f.select(:stimeminutes,(1..59).map{ |n| n % 1 == 0 ? n.to_i : n })%> &nbsp;&nbsp;&nbsp;&nbsp;
+			<%= label_tag("Date", "Date" ) %>
+			<%= f.date_select(:sdayofot, order: [:day, :month, :year], selected: Date.today) %> 
+			<%= f.select(:STAP, ['am', 'pm'], :selected => 'pm') %><br /><br /><br /><br />
+			 <%= label_tag(:EndingTime, :EndingTime ) %><br />
+			 <!-- <%= label_tag(:EndingTime, :EndingTime ) %> -->
+			<%= f.select(:etimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n })  %> :
+			<%= f.select(:etimeminutes,(1..59).map{ |n| n % 1 == 0 ? n.to_i : n })%> &nbsp;&nbsp;&nbsp;&nbsp;
+			 <%= label_tag(:Date, :Date ) %>
+			 <%= f.date_select(:edayofot,  order: [:day, :month, :year],selected: Date.today) %>
+			<%= f.select(:ETAP, ['am', 'pm'], selected: 'am') %><br /><br />
+			<%= f.submit "Save OT" %>
+		
+			
+		<% end %>
+	</p>
 	</div>
 	</div>
 </div>

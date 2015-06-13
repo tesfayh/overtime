@@ -1,10 +1,21 @@
 
+  <style>
+    table, th, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+    th, td {
+        padding: 5px;
+        text-align: left;
+    }
+</style>
+
 <div class="content">
 <div class="wrapper">
 <div class="panel">
-	<h1>Employee's Name_________________<u><%= link_to current_user.name, '/overtimes'%></u>_________________________________________________________ </h1>
+	<p><u><%= link_to 'generate report pdf', 'pdfreport'%></u></p>
  
-<table border="1">
+<table border="1" border-colapse="collapse">
   <tr>
     <th rowspan="4" bgcolor="grey">S.No</th>
     <th rowspan="4" bgcolor="grey">Day</th>
@@ -48,16 +59,9 @@
 <% t1 = Time.parse(Time.now.to_s) %>
  <% days = Time.days_in_month(t1.month, t1.year) %>
 <% for i in 1..days %>
-<% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
+       <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-    <% @reports.each do |ots| %>
-
-      
-
-
-      <% t2 = Time.parse(ots.sdayofot.to_s) %>
-      <% if t2.month == t1.month %>
-         <% if i < 10 && t1.month < 10%>
+        <% if i < 10 && t1.month < 10%>
            <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
          <% elsif i < 10 %>
              <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
@@ -66,10 +70,15 @@
           <% end %>
              <% date = date.to_date %>
             <% date =  date.strftime("%d-%m-%Y") %>
+            <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+    <% @reports.each do |ots| %>
 
+      <% t2 = Time.parse(ots.sdayofot.to_s) %>
+      <% if t2.month == t1.month %>
+        
         <% if t2.day == i %>
            
-          <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+          
            
             <% if ots.stimeminutes >= 30 %>
               <% stotalh = ots.stimehours +=1 %>
@@ -136,14 +145,17 @@
               <% weekend = "#{etotalh} #{etotalm}" %>
             <% end %>
             <% else %>
-                <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+               
                
                
 
         <% end %> 
 
-    <% end %>
+        <% end %>
+
+       
   <% end %>
+   <% weekday = Date::DAYNAMES[date.to_date.wday] %>
   <tr>
     <td><%= i %></td>
     <td><%= weekday %></td>

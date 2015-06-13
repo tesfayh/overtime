@@ -10,9 +10,10 @@ Rails.application.routes.draw do
   
   get 'logout', to: 'sessions#destroy', as: 'logout'
   get 'newot',  to: 'overtimes#new', as: 'newot'
-  get 'update', to: 'overtimes#show', as: 'update'
-  get 'Report', to: 'overtimes#report', as: 'report'
-
+  get 'update', to: 'overtimes#showot', as: 'update'
+  get 'reports', to: 'overtimes#report', as: 'reports'
+  #get  'report', to: 'overtimes#index', as: 'report'
+  get  'pdfreport', to: 'overtimes#index', as: 'pdfreport'
   
   root 'users#new'
 

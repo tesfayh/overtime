@@ -5,23 +5,33 @@ class OvertimesController < ApplicationController
 	end
 
 	def index
-		 
+		@reports = Overtime.where(:user_id => current_user.id)
+	     render :layout => false
+		
     end
+    def pdf
+    	@reports = Overtime.where(:user_id => current_user.id)
+    	
 
+    end
 	def edit
 		@overtime = Overtime.find(params[:id])
 	end
 
 	def show
-		@overtimes = Overtime.where(:user_id => current_user.id)
+		@overtime  = Overtime.find(params[:id])
 	end
 
+    def showot
+    	@overtimes = Overtime.where(:user_id => current_user.id)
+    	render 'showot'
+    end
 	def update
 		@overtime = Overtime.new(ot_params)
 		@overtime.user_id = current_user.id
 		if @overtime.update_attributes(ot_params)
 			flash[:success] = "Your overtime has been updated"
-			redirect_to root_url
+			redirect_to '/update'
 		else
 			render 'edit'
 		end
@@ -31,21 +41,20 @@ class OvertimesController < ApplicationController
 	def destroy
 		@ot = Overtime.find(params[:id])
 		@ot.destroy
-		flash[:success] = "OT deleted successfuly!"
-		redirect_to root_url
+		redirect_to root_url, notice: "OT deleted successfuly!"
 	end
 	def report
 		@reports = Overtime.where(:user_id => current_user.id)
+		
 	end
 	def create
 		@overtime = Overtime.new(ot_params)
 		@overtime.user_id = current_user.id
 		if @overtime.save
-			redirect_to root_url, notice: "you have saved your OT! "
+			redirect_to '/update', notice: "you have saved your OT! "
 		else
-			flash[:error]  = "Your OT hasn't been saved"
-			flash[:notice] = "Your OT for this day have already been registered!"
-			redirect_to '/newot'
+			
+			render 'new'
 		end
 	end
 
