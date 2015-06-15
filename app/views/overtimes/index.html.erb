@@ -13,57 +13,67 @@
     th, td {
         padding: 5px;
         text-align: left;
+
     }
-    
+    p {
+      text-align: center;
+      font-size: 14px;
+    }
+    h5 {
+      text-align: left;
+      font-size: 10px;
+    }
 </style>
 </head>
 <body>
 <header>
   <div class = "wrapper">
-  
+  <p>LIB INTERNATIONAL BANK(S.C)<br />
+     HEAD OFFICE-ICT<br />
+     DELTA-BANK-PROJECT<br />
+     <b>Follow Up Sheet for Overtime </b>
+     <h5><b>  Employee's Name________________<u><%= current_user.name %></u>___________________________________________________</b></h5>
+  </p>
    
-  <% if current_user %><br /> <br />
-   <b>  Employee's Name________________<u><%= current_user.name %></u>___________________________________________________</b>_
+   
     
-    <% end %> 
     
   </div>
-
-	
   </header>
+
 <table >
-  <tr>
-    <th rowspan="4" bgcolor="grey">S.No</th>
-    <th rowspan="4" bgcolor="grey">Day</th>
-    <th rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-    <th rowspan="4" bgcolor="grey">Period of Time(Range of Time)</th>
-    <th rowspan="4" bgcolor="grey">Total No of Hours Worked</th>
-    <th colspan="4" >Distribution of Worked Time(OT Ratio)</th>
-    <th rowspan="4" bgcolor="grey">Signature of the employee</th>
-    <th rowspan="4" bgcolor="grey">Remark</th>
+  <tr><b>
+    <td rowspan="4" bgcolor="grey"><b>S.No</b></td>
+    <td rowspan="4" bgcolor="grey">Day</td>
+    <td rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td rowspan="4" bgcolor="grey">Period of Time (Range of Time)</td>
+    <td rowspan="4" bgcolor="grey">Total No of Hours Worked</td>
+    <td colspan="4" >Distribution of Worked Time(OT Ratio)</td>
+    <td rowspan="4" bgcolor="grey">Signature of the employee</td>
+    <td rowspan="4" bgcolor="grey">Remark</td></b>
     </tr>
     <tr>
         
-        <th bgcolor="grey">Evening</th>
-        <th bgcolor="grey">Night</th>
-        <th bgcolor="grey">weekend</th>
-        <th bgcolor="grey">Holidays</th>
+        <td bgcolor="grey">Evening</th>
+        <td bgcolor="grey">Night</td>
+        <td bgcolor="grey">weekend</td>
+        <td bgcolor="grey">Holidays</td>
         
     </tr>
     <tr>
       
-      <th bgcolor="grey">5p.m-10p.m</th>
-      <th bgcolor="grey">10.p.m-6a.m</th>
-      <th bgcolor="grey"> 8a.m-6a.m</th>
-      <th bgcolor="grey">8a.m-6a.m</th>
+      <td bgcolor="grey">5p.m-10p.m</td>
+      <td bgcolor="grey">10.p.m-6a.m</td>
+      <td bgcolor="grey"> 8a.m-6a.m</td>
+      <td bgcolor="grey">8a.m-6a.m</td>
       
     </tr>
     <tr>
       
-      <th bgcolor="grey">1.25</th>
-      <th bgcolor="grey">1.50</th>
-      <th bgcolor="grey">2.00</th>
-      <th bgcolor="grey">2.50</th>
+      <td bgcolor="grey">1.25</td>
+      <td bgcolor="grey">1.50</td>
+      <td bgcolor="grey">2.00</td>
+      <td bgcolor="grey">2.50</td>
      
     </tr>
     <% totalh = 0 %>    <% nightm = 0 %>     <% weekendh = 0 %>
@@ -77,14 +87,7 @@
 <% for i in 1..days %>
 <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-    <% @reports.each do |ots| %>
-
-      
-
-
-      <% t2 = Time.parse(ots.sdayofot.to_s) %>
-      <% if t2.month == t1.month %>
-         <% if i < 10 && t1.month < 10%>
+        <% if i < 10 && t1.month < 10%>
            <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
          <% elsif i < 10 %>
              <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
@@ -93,10 +96,19 @@
           <% end %>
              <% date = date.to_date %>
             <% date =  date.strftime("%d-%m-%Y") %>
+             <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+    <% @reports.each do |ots| %>
+
+      
+
+
+      <% t2 = Time.parse(ots.sdayofot.to_s) %>
+      <% if t2.month == t1.month %>
+        
 
         <% if t2.day == i %>
            
-          <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+         
            
             <% if ots.stimeminutes >= 30 %>
               <% stotalh = ots.stimehours +=1 %>
@@ -200,5 +212,7 @@
       <td></td>
   </tr>
 </table>
+<br /><br />
+<p><b>Checked____________________________________</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Aproved By__________________________________________</b></p>
 </body>
 </html>

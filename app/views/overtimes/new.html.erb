@@ -13,7 +13,9 @@
 				</ul>
 			<% end %>
 			 
-			
+				<%= label_tag(:Partner, "Select Your Partner:" ) %>
+				<%= collection_select(:userid,:name, User.order(:name), :id, :name) %>
+		
 			<br /><%= label_tag(:StartingTime, :StartingTime ) %><br />
 			<!--<%= label_tag(:StartingTime, :StartingTime ) %> -->
 			<%= f.select(:stimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n }, selected: 5)%> :

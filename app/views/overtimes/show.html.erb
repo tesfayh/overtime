@@ -2,6 +2,7 @@
 <div class="content">
 <div class="wrapper">
 <div class="panel">
+<<<<<<< HEAD
 	<h1> Register your Over Time</h1>
 	<p>
 		<%= form_for @overtime do |f| %>
@@ -33,6 +34,63 @@
 			
 		<% end %>
 	</p>
+=======
+	<h1>LIB employees over time</h1>
+ 
+<table border="1">
+  <tr>
+    <th>S.No</th>
+    <th>Day</th>
+    <th>Date</th>
+    <th>Period of Time</th>
+    <th>Total No of Hours Worked</th>
+    <th>Edit</th>
+    <th>Remove</th>
+  </tr>
+
+<% @overtimes.each.with_index do |ots, index| %>
+  <tr>
+  	<td> <%= index +1 %> </td>
+    <td><%= Date::DAYNAMES[ots.sdayofot.wday] %></td>
+    <td><%= ots.sdayofot.strftime("%d-%m-%y") %></td>
+     <% if ots.stimeminutes >= 30 %>
+      <% stotalh = ots.stimehours +=1 %>
+   <% elsif ots.stimeminutes >= 15 %>
+
+      <% stotalh = ots.stimehours %>
+      <% stotalm = '1/2' %>
+   <% else %>
+      <% stotalh = ots.stimehours + 0 %>
+   <% end %>
+   <% if ots.etimeminutes >= 30 %>
+      <% etotalh = ots.etimehours +=1 %>
+   <% elsif ots.etimeminutes >= 15 %>
+
+      <% etotalh = ots.etimehours  %>
+      <% etotalm = '1/2' %>
+    <% else %>
+      <% etotalh = ots.etimehours + 0 %>
+    <% end %>
+    <td><%= ots.stimehours %>  <%= ots.STAP %> - <%= ots.etimehours %><%= etotalm %>  <%= ots.ETAP %></td>
+    
+    <td>
+  
+    <% if ots.ETAP != ots.STAP %>
+       <%= etotalh + 12 - stotalh %> <%= etotalm %></td>
+    <% else %>
+       <%= etotalh - stotalh %> <%= etotalm %></td>
+       <% end %>
+
+    
+    <td><%= link_to "Edit", edit_overtime_path(ots) %></td>
+    <td><%= button_to "Remove",ots, method: :delete,
+                                  data: { confirm: "You sure?" }  %></td>
+                                  
+  </tr>
+  
+<% end %>
+</table>
+>>>>>>> 8de8d154bf9cfc3fa7c9a57df7af95519868fdbc
 	</div>
 	</div>
 </div>

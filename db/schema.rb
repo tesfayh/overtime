@@ -14,15 +14,15 @@
 ActiveRecord::Schema.define(version: 20150522122919) do
 
   create_table "ots", force: :cascade do |t|
-    t.string   "starting_time", limit: 255
-    t.string   "ending_time",   limit: 255
-    t.string   "sdayofOt",      limit: 255
-    t.string   "edayofOt",      limit: 255
+    t.integer  "starting_time", limit: 4
+    t.integer  "ending_time",   limit: 4
+    t.date     "sdayofOt"
+    t.date     "edayofOt"
     t.string   "STAP",          limit: 255
     t.string   "ETAP",          limit: 255
+    t.integer  "user_id",       limit: 4
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
-    t.integer  "user_id",       limit: 4,   null: false
   end
 
   create_table "overtimes", force: :cascade do |t|

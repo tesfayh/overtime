@@ -19,12 +19,13 @@
     <th>Day</th>
     <th>Date</th>
     <th>Period of Time</th>
-    <th>Total No of Hours Worked</th>
+    <th>Total No of Hours<br /> Worked</th>
     <th>Edit</th>
     <th>Remove</th>
   </tr>
 
 <% @overtimes.each.with_index do |ots, index| %>
+
   <tr>
   	<td> <%= index +1 %> </td>
     <td><%= Date::DAYNAMES[ots.sdayofot.wday] %></td>
