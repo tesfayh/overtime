@@ -11,18 +11,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150522122919) do
+ActiveRecord::Schema.define(version: 20150619082017) do
 
   create_table "ots", force: :cascade do |t|
-    t.integer  "starting_time", limit: 4
-    t.integer  "ending_time",   limit: 4
-    t.date     "sdayofOt"
-    t.date     "edayofOt"
+    t.string   "starting_time", limit: 255
+    t.string   "ending_time",   limit: 255
+    t.string   "sdayofOt",      limit: 255
+    t.string   "edayofOt",      limit: 255
     t.string   "STAP",          limit: 255
     t.string   "ETAP",          limit: 255
-    t.integer  "user_id",       limit: 4
     t.datetime "created_at",                null: false
     t.datetime "updated_at",                null: false
+    t.integer  "user_id",       limit: 4,   null: false
   end
 
   create_table "overtimes", force: :cascade do |t|
@@ -37,6 +37,9 @@ ActiveRecord::Schema.define(version: 20150522122919) do
     t.date     "edayofot"
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.string   "beforeEOD",    limit: 255
+    t.string   "EOD",          limit: 255
+    t.string   "afterEOD",     limit: 255
   end
 
   create_table "users", force: :cascade do |t|

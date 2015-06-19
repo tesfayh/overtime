@@ -1,5 +1,5 @@
 class OvertimesController < ApplicationController
-	 before_filter :auth, only: [:create, :destroy, :edit, :update, :show, :report, :index]
+	 before_filter :auth, only: [:create, :destroy, :edit, :update, :show, :report, :index, :showot, :new, :ot_report]
 	def new
 		@overtime = Overtime.new
 		@user = User.all
@@ -7,14 +7,26 @@ class OvertimesController < ApplicationController
 
 	def index
 		@reports = Overtime.where(:user_id => current_user.id)
-	     render :layout => false
-		
+
+		respond_to do |format|
+	      format.html
+	      format.pdf do
+        	render pdf: "#{current_user.name} OT Report", 
+        	      :layout => false, 
+        	       template: 'overtimes/index.pdf.erb',
+        	       layout: 'pdf.html.erb',
+        	       disposition: 'inline'
+      end
+    end
     end
     def pdf
     	@reports = Overtime.where(:user_id => current_user.id)
-    	
+	end
+	def ot_report
+		 @reports = Overtime.all
+		 render 'overtime_report',:layout => false
 
-    end
+	end
 	def edit
 		@overtime = Overtime.find(params[:id])
 	end

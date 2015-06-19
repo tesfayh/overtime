@@ -7,7 +7,11 @@ class SessionsController < ApplicationController
   	if user and user.authenticate(params[:password])
   			session[:user_id] = user.id
         
-  			redirect_to '/newot', notice: "Logged In!"
+        if user.username == "admin"
+          redirect_to '/overtime_report'
+        else
+  			 redirect_to '/newot', notice: "Logged In!"
+        end
   	else
   			flash[:error] = "wrong username or password."
   		  	redirect_to root_url

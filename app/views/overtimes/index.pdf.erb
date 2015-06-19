@@ -9,9 +9,9 @@
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
-        margin-left:  20px;
+        margin-left:  5px;
         margin-right:10px;
-        width: 1200px;
+        width: 1100px;
     }
     th, td {
         padding: 5px;
@@ -24,7 +24,7 @@
     }
     h5 {
       text-align: left;
-      font-size: 10px;
+      font-size: 15px;
       margin: 10px;
     }
 </style>
@@ -44,13 +44,13 @@
     
   </div>
   </header>
-<h5><b>  Employee's Name________________<u><%= current_user.name %></u>______________________________________________________________________________</b></h5>
+<h5><b>  Employee's Name________________<u><%= current_user.name.split.map(&:capitalize)*' ' %></u>______________________________________________________________________________</b></h5>
 <table >
   <tr><b>
     <td rowspan="4" bgcolor="grey"><b>S.No</b></td>
     <td rowspan="4" bgcolor="grey">Day</td>
     <td rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td rowspan="4" bgcolor="grey">Period of Time<br /> (Range of Time)</td>
+    <td rowspan="4" bgcolor="grey">Period of Time(Range of Time)</td>
     <td rowspan="4" bgcolor="grey">Total No of Hours Worked</td>
     <td colspan="4" >Distribution of Worked Time(OT Ratio)</td>
     <td rowspan="4" bgcolor="grey">Signature</td>

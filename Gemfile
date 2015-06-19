@@ -28,6 +28,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
  gem 'bcrypt', '~> 3.1.7'
  gem 'prawn'
  gem "prawnto_2", :require => "prawnto"
+ gem 'wicked_pdf'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

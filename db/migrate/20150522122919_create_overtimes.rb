@@ -10,7 +10,7 @@ class CreateOvertimes < ActiveRecord::Migration
       t.string  :STAP
       t.date    :sdayofot
       t.date    :edayofot
-
+      
       t.timestamps null: false
     end
   end

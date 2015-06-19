@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get 'newot',  to: 'overtimes#new', as: 'newot'
   get 'update', to: 'overtimes#showot', as: 'update'
   get 'reports', to: 'overtimes#report', as: 'reports'
-  #get  'report', to: 'overtimes#index', as: 'report'
+  get  'overtime_report', to: 'overtimes#ot_report', as: 'ot_report'
   get  'pdfreport', to: 'overtimes#index', as: 'pdfreport'
   
   root 'users#new'

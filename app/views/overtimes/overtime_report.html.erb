@@ -33,7 +33,6 @@
 <header>
   <div class = "wrapper">
   <p>LIB INTERNATIONAL BANK(S.C)<br />
-     HEAD OFFICE-ICT<br />
      DELTA-BANK-PROJECT<br />
      <b>Follow Up Sheet for Overtime </b>
      
@@ -44,54 +43,40 @@
     
   </div>
   </header>
-<h5><b>  Employee's Name________________<u><%= current_user.name %></u>______________________________________________________________________________</b></h5>
+ <h5> <%= link_to 'logout'"(#{current_user.username})", logout_path()%><br /><br />
+  <%= form_tag('/newot') do %>
+OT Report for 
+<%= select_month(14, prompt: 'Choose month',:onchange => "this.form.submit();")%></h5>
+<% end %>
 <table >
   <tr><b>
-    <td rowspan="4" bgcolor="grey"><b>S.No</b></td>
-    <td rowspan="4" bgcolor="grey">Day</td>
-    <td rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td rowspan="4" bgcolor="grey">Period of Time<br /> (Range of Time)</td>
-    <td rowspan="4" bgcolor="grey">Total No of Hours Worked</td>
-    <td colspan="4" >Distribution of Worked Time(OT Ratio)</td>
-    <td rowspan="4" bgcolor="grey">Signature</td>
-    <td rowspan="4" bgcolor="grey">Remark</td></b>
+    <td  bgcolor="grey"><b>S.No</b></td>
+    <td  bgcolor="grey">Day</td>
+    <td  bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    <td  bgcolor="grey">Period of Time (Range of Time)</td>
+    <td  bgcolor="grey">Total No of Hours Worked</td>
+    <td  bgcolor="grey">EOD</td>
+    <td  bgcolor="grey">EOD</td>
+    <td  bgcolor="grey">After EOD</td>
+    <td  bgcolor="grey">Name</td></b>
     </tr>
-    <tr>
-        
-        <td bgcolor="grey">Evening</th>
-        <td bgcolor="grey">Night</td>
-        <td bgcolor="grey">weekend</td>
-        <td bgcolor="grey">Holidays</td>
-        
-    </tr>
-    <tr>
-      
-      <td bgcolor="grey">5p.m-10p.m</td>
-      <td bgcolor="grey">10.p.m-6a.m</td>
-      <td bgcolor="grey"> 8a.m-6a.m</td>
-      <td bgcolor="grey">8a.m-6a.m</td>
-      
-    </tr>
-    <tr>
-      
-      <td bgcolor="grey">1.25</td>
-      <td bgcolor="grey">1.50</td>
-      <td bgcolor="grey">2.00</td>
-      <td bgcolor="grey">2.50</td>
-     
-    </tr>
+    
+    
     <% totalh = 0 %>    <% nightm = 0 %>     <% weekendh = 0 %>
     <% weekendm = 0 %>  <% weekday  = '' %>  <% totalm = 0 %>
     <% eveningh = 0 %>  <% nighth = 0 %>     <% date = ''     %>
     <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
     <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-
+    <% userid  = '' %>   <% name = '' %>     <% eodstatus = '' %>
+    <% month = 0 %>
 <% t1 = Time.parse(Time.now.to_s) %>
- <% days = Time.days_in_month(t1.month, t1.year) %>
+<%= month = t1.month - 1 %> 
+ <% days = Time.days_in_month(t1.month  , t1.year) %>
 <% for i in 1..days %>
 <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-        <% if i < 10 && t1.month < 10%>
+        <% userid = '' %>   <% name = '' %>     <% eodstatus = '' %>
+        <% if i < 10 && month < 10%>
            <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
          <% elsif i < 10 %>
              <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
@@ -101,19 +86,22 @@
              <% date = date.to_date %>
             <% date =  date.strftime("%d-%m-%Y") %>
              <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+
     <% @reports.each do |ots| %>
-
-      
-
 
       <% t2 = Time.parse(ots.sdayofot.to_s) %>
       <% if t2.month == t1.month %>
         
-
+       
         <% if t2.day == i %>
-           
-         
-           
+           <% eodstatus ='OK' %>
+          <%userid = ots.user_id %>
+          <% user = User.find_by_id(userid ) %>
+          <% if name== '' %>
+           <% name = "#{user.name} "" #{name}"  %>
+           <% else %>
+           <% name = "#{user.name} "" & #{name}"  %>
+           <% end %>
             <% if ots.stimeminutes >= 30 %>
               <% stotalh = ots.stimehours +=1 %>
            <% elsif ots.stimeminutes >= 15 %>
@@ -193,30 +181,17 @@
     <td><%= date %></td>
     <td><%= range %></td>
     <td><% if etotalh !=0 %> <%= etotalh %> <% end %><% if etotalm != 0 %><%= etotalm %> <% end %></td>
-    <td><%= evening %></td>
-    <td><%= night %></td>
-    <td><%= weekend %></td>
-    <td></td>
-    <td></td>
-    <td></td>
+   
+    
+    <td><%= eodstatus %></td>
+    <td><%= eodstatus %></td>
+    <td><%= eodstatus %></td>
+    <td><%= name %></td>
   </tr>
+
 <% end %>
-<tr>
-      <td colspan="4" >
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Total</td>
-      <td><%= totalh + totalm %></td>
-      <td><%= eveningh %></td>
-      <td><%= nighth + nightm %></td>
-      <td><%= weekendh + weekendm %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-  </tr>
+
 </table>
 <br /><br />
-<p><b>Checked____________________________________</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Aproved By__________________________________________</b></p>
 </body>
 </html>

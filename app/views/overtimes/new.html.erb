@@ -14,15 +14,21 @@
 			<% end %>
 			 
 				<%= label_tag(:Partner, "Select Your Partner:" ) %>
-				<%= collection_select(:userid,:name, User.order(:name), :id, :name) %>
-		
-			<br /><%= label_tag(:StartingTime, :StartingTime ) %><br />
+				<%= collection_select(:userid,:name, User.select(:name).where.not(username: 'admin').order(:name), :id, :name) %><br /><br />
+				<%= label_tag(:status, "EOD Status:" ) %><br />
+				<%= label_tag(:status, "Before EOD:" ) %>
+				<%= f.select(:beod, ['OK','Not OK'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= label_tag(:status, "EOD :" ) %>
+				<%= f.select(:eod, ['OK','Not OK'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= label_tag(:status, "After EOD:" ) %>
+				<%= f.select(:aeod, ['OK','Not OK'], selected: 'OK' ) %><br /><br />
+			<%= label_tag(:StartingTime, :StartingTime ) %><br />
 			<!--<%= label_tag(:StartingTime, :StartingTime ) %> -->
 			<%= f.select(:stimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n }, selected: 5)%> :
 			<%= f.select(:stimeminutes,(1..59).map{ |n| n % 1 == 0 ? n.to_i : n })%> &nbsp;&nbsp;&nbsp;&nbsp;
 			<%= label_tag("Date", "Date" ) %>
 			<%= f.date_select(:sdayofot, order: [:day, :month, :year], selected: Date.today) %> 
-			<%= f.select(:STAP, ['am', 'pm'], :selected => 'pm') %><br /><br /><br /><br />
+			<%= f.select(:STAP, ['am', 'pm'], :selected => 'pm') %><br /><br /><br />
 			 <%= label_tag(:EndingTime, :EndingTime ) %><br />
 			 <!-- <%= label_tag(:EndingTime, :EndingTime ) %> -->
 			<%= f.select(:etimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n })  %> :
