@@ -6,5 +6,6 @@ class User < ActiveRecord::Base
 	
 	validates :email, presence: true, uniqueness: true,format: {with: /^[\w\.+-]+@([\w]+\.)+[a-zA-Z]+$/, :multiline => true }
 	validates :username, presence:true, uniqueness:true
-	validates :name, presence:true
+	validates :name, presence:true, uniqueness:true
+	
 end

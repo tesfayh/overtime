@@ -3,7 +3,7 @@
 <div class="wrapper">
 <div class="panel">
 	<h1> Register your Over Time</h1>
-	<p>
+	
 		<%= form_for @overtime do |f| %>
 			<% if @overtime.errors.any? %>
 				<ul>
@@ -14,14 +14,14 @@
 			<% end %>
 			 
 				<%= label_tag(:Partner, "Select Your Partner:" ) %>
-				<%= collection_select(:userid,:name, User.select(:name).where.not(username: 'admin').order(:name), :id, :name) %><br /><br />
+				<%= collection_select(:userid, :name, User.select(:name).where.not(username: 'admin').order(:name), :id, :name) %><br /><br />
 				<%= label_tag(:status, "EOD Status:" ) %><br />
 				<%= label_tag(:status, "Before EOD:" ) %>
-				<%= f.select(:beod, ['OK','Not OK'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= f.select(:beforeEOD, ['OK','Not OK','Slow', 'Very Slow'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
 				<%= label_tag(:status, "EOD :" ) %>
-				<%= f.select(:eod, ['OK','Not OK'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
+				<%= f.select(:EOD, ['OK','Not OK','Slow', 'Very Slow'], selected: 'OK' ) %>&nbsp;&nbsp;&nbsp;&nbsp;
 				<%= label_tag(:status, "After EOD:" ) %>
-				<%= f.select(:aeod, ['OK','Not OK'], selected: 'OK' ) %><br /><br />
+				<%= f.select(:afterEOD, ['OK','Not OK','Slow', 'Very Slow'], selected: 'OK' ) %><br /><br />
 			<%= label_tag(:StartingTime, :StartingTime ) %><br />
 			<!--<%= label_tag(:StartingTime, :StartingTime ) %> -->
 			<%= f.select(:stimehours,(1..12).map{ |n| n % 1 == 0 ? n.to_i : n }, selected: 5)%> :

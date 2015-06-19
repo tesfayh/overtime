@@ -114,7 +114,7 @@
            
          
            
-            <% if ots.stimeminutes >= 30 %>
+            <% if ots.stimeminutes > 30 %>
               <% stotalh = ots.stimehours +=1 %>
            <% elsif ots.stimeminutes >= 15 %>
 
@@ -125,7 +125,7 @@
               <% stotalh = ots.stimehours + 0 %>
            <% end %>
           
-           <% if ots.etimeminutes >= 30 %>
+           <% if ots.etimeminutes > 30 %>
               <% etotalh = ots.etimehours +=1 %>
            <% elsif ots.etimeminutes >= 15 %>
 

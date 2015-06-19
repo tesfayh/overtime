@@ -30,7 +30,7 @@
   	<td> <%= index +1 %> </td>
     <td><%= Date::DAYNAMES[ots.sdayofot.wday] %></td>
     <td><%= ots.sdayofot.strftime("%d-%m-%y") %></td>
-     <% if ots.stimeminutes >= 30 %>
+     <% if ots.stimeminutes > 30 %>
       <% stotalh = ots.stimehours +=1 %>
    <% elsif ots.stimeminutes >= 15 %>
 
@@ -39,7 +39,7 @@
    <% else %>
       <% stotalh = ots.stimehours + 0 %>
    <% end %>
-   <% if ots.etimeminutes >= 30 %>
+   <% if ots.etimeminutes > 30 %>
       <% etotalh = ots.etimehours +=1 %>
    <% elsif ots.etimeminutes >= 15 %>
 
@@ -60,7 +60,7 @@
 
     
     <td><%= link_to "Edit", edit_overtime_path(ots) %></td>
-    <td><%= link_to "Delete",ots, method: :delete,
+    <td><%= button_to "Delete",ots, method: :delete,
                                   data: { confirm: "You sure?" }  %></td>
                                   
   </tr>

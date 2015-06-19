@@ -68,7 +68,7 @@ OT Report for
     <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
     <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
     <% userid  = '' %>   <% name = '' %>     <% eodstatus = '' %>
-    <% month = 0 %>
+    <% month = 0 %>      <% eod = ''  %>     <% beod = '' %> <% aeod = '' %>
 <% t1 = Time.parse(Time.now.to_s) %>
 <%= month = t1.month - 1 %> 
  <% days = Time.days_in_month(t1.month  , t1.year) %>
@@ -76,6 +76,7 @@ OT Report for
 <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
         <% userid = '' %>   <% name = '' %>     <% eodstatus = '' %>
+         <% eod = ''  %>     <% beod = '' %>  <% aeod = '' %>
         <% if i < 10 && month < 10%>
            <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
          <% elsif i < 10 %>
@@ -94,7 +95,9 @@ OT Report for
         
        
         <% if t2.day == i %>
-           <% eodstatus ='OK' %>
+           <% eod = ots.EOD %>
+           <% beod = ots.beforeEOD %>
+           <% aeod = ots.afterEOD %>
           <%userid = ots.user_id %>
           <% user = User.find_by_id(userid ) %>
           <% if name== '' %>
@@ -102,7 +105,7 @@ OT Report for
            <% else %>
            <% name = "#{user.name} "" & #{name}"  %>
            <% end %>
-            <% if ots.stimeminutes >= 30 %>
+            <% if ots.stimeminutes > 30 %>
               <% stotalh = ots.stimehours +=1 %>
            <% elsif ots.stimeminutes >= 15 %>
 
@@ -113,7 +116,7 @@ OT Report for
               <% stotalh = ots.stimehours + 0 %>
            <% end %>
           
-           <% if ots.etimeminutes >= 30 %>
+           <% if ots.etimeminutes > 30 %>
               <% etotalh = ots.etimehours +=1 %>
            <% elsif ots.etimeminutes >= 15 %>
 
@@ -183,9 +186,9 @@ OT Report for
     <td><% if etotalh !=0 %> <%= etotalh %> <% end %><% if etotalm != 0 %><%= etotalm %> <% end %></td>
    
     
-    <td><%= eodstatus %></td>
-    <td><%= eodstatus %></td>
-    <td><%= eodstatus %></td>
+    <td><%= beod %></td>
+    <td><%= eod %></td>
+    <td><%= aeod %></td>
     <td><%= name %></td>
   </tr>
 

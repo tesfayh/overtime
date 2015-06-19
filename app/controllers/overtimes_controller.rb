@@ -28,7 +28,7 @@ class OvertimesController < ApplicationController
 
 	end
 	def edit
-		@overtime = Overtime.find(params[:id])
+		@overtime = current_user.overtimes.find(params[:id])
 	end
 
 	def show
@@ -40,7 +40,7 @@ class OvertimesController < ApplicationController
     	render 'showot'
     end
 	def update
-		@overtime = Overtime.new(ot_params)
+		@overtime = current_user.overtimes.find(params[:id])
 		@overtime.user_id = current_user.id
 		if @overtime.update_attributes(ot_params)
 			flash[:success] = "Your overtime has been updated"
@@ -65,22 +65,24 @@ class OvertimesController < ApplicationController
 		@overtime.user_id = current_user.id
 		if @overtime.save
 		    
-
-			@user = User.where(:name => params[:name])
-			#@overtime.user_id = user.id
+			#@overtime = Overtime.new(ot_params)
+			#user = User.select(:id).where(name: params[:userid][:name])
+			#@overtime.user_id = user.first.id
 		#if	@overtime.save	
 			redirect_to '/update', notice: "you have saved your OT! "
-		#else
-		#	render 'new', notice: "error saving OT"
-		#end
+	#	else
+	#		render 'new', notice: "error saving OT"
+	#	end
 		else
-		  render 'new', notice: "error saving OT"
+		  redirect_to '/newot'
+		  flash[:error] = "error: Users should only enter one OT per day." 
 		end
 	
 	end
 
 	def ot_params
-		params.require(:overtime).permit(:user_id, :stimehours, :stimeminutes, :etimehours, :etimeminutes, :sdayofot, :edayofot, :ETAP, :STAP, :name )
+		params.require(:overtime).permit(:user_id, :stimehours, :stimeminutes, :etimehours, :etimeminutes, 
+										:beforeEOD, :EOD, :afterEOD, :sdayofot, :edayofot, :ETAP, :STAP, :name ,:userid)
 	end
 end
 
