@@ -12,9 +12,10 @@ Rails.application.routes.draw do
   get 'newot',  to: 'overtimes#new', as: 'newot'
   get 'update', to: 'overtimes#showot', as: 'update'
   get 'reports', to: 'overtimes#report', as: 'reports'
-  get  'overtime_report', to: 'overtimes#ot_report', as: 'ot_report'
+  get  'overtime_report', to: 'overtimes#otreport', as: 'ot_report'
   get  'pdfreport', to: 'overtimes#index', as: 'pdfreport'
-  
+  post 'otreport', to: 'overtimes#otreport', as: 'otreport'
+  post 'monthlyreport', to: 'overtimes#report', as: 'monthlyreport'
   root 'users#new'
 
   # Example of regular route:

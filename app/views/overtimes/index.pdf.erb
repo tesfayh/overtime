@@ -11,20 +11,23 @@
         border-collapse: collapse;
         margin-left:  5px;
         margin-right:10px;
-        width: 1100px;
+       
     }
-    th, td {
+    table {
+      width: 1080px
+    }
+    th, td, tr {
         padding: 5px;
         text-align: left;
-
+        font-size: 18px;
     }
     p {
       text-align: center;
-      font-size: 14px;
+      font-size: 18px;
     }
     h5 {
       text-align: left;
-      font-size: 15px;
+      font-size: 18px;
       margin: 10px;
     }
 </style>
@@ -44,40 +47,40 @@
     
   </div>
   </header>
-<h5><b>  Employee's Name________________<u><%= current_user.name.split.map(&:capitalize)*' ' %></u>______________________________________________________________________________</b></h5>
-<table >
-  <tr><b>
-    <td rowspan="4" bgcolor="grey"><b>S.No</b></td>
-    <td rowspan="4" bgcolor="grey">Day</td>
-    <td rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-    <td rowspan="4" bgcolor="grey">Period of Time(Range of Time)</td>
-    <td rowspan="4" bgcolor="grey">Total No of Hours Worked</td>
-    <td colspan="4" >Distribution of Worked Time(OT Ratio)</td>
-    <td rowspan="4" bgcolor="grey">Signature</td>
-    <td rowspan="4" bgcolor="grey">Remark</td></b>
+<h5><b>  Employee's Name________________<u><%= current_user.name.split.map(&:capitalize)*' ' %></u>_________________________________________________________</b></h5>
+<table border="1" border-colapse="collapse">
+  <tr>
+    <th rowspan="4" bgcolor="grey">S.No</th>
+    <th rowspan="4" bgcolor="grey">Day</th>
+    <th rowspan="4" bgcolor="grey">Date&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+    <th rowspan="4" bgcolor="grey">Period of Time (Range of Time)</th>
+    <th rowspan="4" bgcolor="grey">Total No of Hours Worked</th>
+    <th colspan="4" >Distribution of Worked Time (OT Ratio)</th>
+    <th rowspan="4" bgcolor="grey">Signature of the employee</th>
+    <th rowspan="4" bgcolor="grey">Remark</th>
     </tr>
     <tr>
         
-        <td bgcolor="grey">Evening</th>
-        <td bgcolor="grey">Night</td>
-        <td bgcolor="grey">weekend</td>
-        <td bgcolor="grey">Holidays</td>
+        <th bgcolor="grey">Evening</th>
+        <th bgcolor="grey">Night</th>
+        <th bgcolor="grey">weekend</th>
+        <th bgcolor="grey">Holidays</th>
         
     </tr>
     <tr>
       
-      <td bgcolor="grey">5p.m-10p.m</td>
-      <td bgcolor="grey">10.p.m-6a.m</td>
-      <td bgcolor="grey"> 8a.m-6a.m</td>
-      <td bgcolor="grey">8a.m-6a.m</td>
+      <th bgcolor="grey">5p.m-10p.m</th>
+      <th bgcolor="grey">10.p.m-6a.m</th>
+      <th bgcolor="grey"> 8a.m-6a.m</th>
+      <th bgcolor="grey">8a.m-6a.m</th>
       
     </tr>
     <tr>
       
-      <td bgcolor="grey">1.25</td>
-      <td bgcolor="grey">1.50</td>
-      <td bgcolor="grey">2.00</td>
-      <td bgcolor="grey">2.50</td>
+      <th bgcolor="grey">1.25</th>
+      <th bgcolor="grey">1.50</th>
+      <th bgcolor="grey">2.00</th>
+      <th bgcolor="grey">2.50</th>
      
     </tr>
     <% totalh = 0 %>    <% nightm = 0 %>     <% weekendh = 0 %>
@@ -86,33 +89,31 @@
     <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
     <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
 
-<% t1 = Time.parse(Time.now.to_s) %>
- <% days = Time.days_in_month(t1.month, t1.year) %>
+  <% t1 = Time.parse((Time.now ).to_s) %>
+  <% days = Time.days_in_month(@month.to_i, t1.year) %>
+
 <% for i in 1..days %>
-<% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
+       <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-        <% if i < 10 && t1.month < 10%>
-           <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
-         <% elsif i < 10 %>
-             <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
-          <% elsif t1.month < 10 %>
-             <% date = "#{i} - 0#{t1.month} - #{t1.year} " %>
+        <% if i < 10 && @month.to_i < 10%>
+           <% date = "0#{i}-0#{@month}-#{t1.year} " %>
+         <% elsif i < 10 && @month.to_i >= 10 %>
+             <% date = "0#{i}-#{@month}-#{t1.year} " %>
+          <% elsif @month.to_i >= 10 && i >= 10  %>
+             <% date = "#{i}-#{@month}-#{t1.year} " %>
+          <% elsif @month.to_i < 10 && i >= 10  %>
+            <% date = "#{i}-0#{@month}-#{t1.year} " %>
           <% end %>
-             <% date = date.to_date %>
-            <% date =  date.strftime("%d-%m-%Y") %>
-             <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+            <% date = (Date.parse(date)).strftime("%d-%m-%Y") %>
+            <% weekday = Date::DAYNAMES[date.to_date.wday] %>
     <% @reports.each do |ots| %>
 
-      
-
-
       <% t2 = Time.parse(ots.sdayofot.to_s) %>
-      <% if t2.month == t1.month %>
+      <% if t2.month == @month.to_i %>
         
-
         <% if t2.day == i %>
            
-         
+          
            
             <% if ots.stimeminutes > 30 %>
               <% stotalh = ots.stimehours +=1 %>
@@ -126,7 +127,7 @@
            <% end %>
           
            <% if ots.etimeminutes > 30 %>
-              <% etotalh = ots.etimehours +=1 %>
+              <% etotalh = ots.etimehours += 1  %>
            <% elsif ots.etimeminutes >= 15 %>
 
               <% etotalh = ots.etimehours  %>
@@ -145,13 +146,16 @@
             <% if etotalm==0 %>
               <% etotalm = '' %>
             <% end %>
-            <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
-            
+            <% if ots.etimehours > 12 %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours % 12} #{etotalm} #{ots.STAP}" %>
+             <% else %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
+              <% end %>
                <!-- total number of hours worked -->
            
-                <% if ots.ETAP != ots.STAP %>
-                  <% etotalh = etotalh + 12 - stotalh  %>
-                  
+                <% if ots.ETAP != ots.STAP  && etotalh < 12%>
+                  <% etotalh = (etotalh + 12 - stotalh)  %>
+                                 
                 <% else %>
                    <% etotalh = etotalh - stotalh %> 
                    
@@ -161,36 +165,45 @@
                 <% totalh = totalh + etotalh %>
             <% if (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Saturday') !=0 &&
                   (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Sunday') !=0 %>
-                  <% eveningh = eveningh + 5 %>
-                  <% nighth = nighth + etotalh - 5 %>
+                  
                  
-            
-                <% if etotalh >= 5 %> <% evening = 5 %> 
-                <% else %> <% evening = "#{etotalh} #{etotalm}" %> 
-                <% end %> 
-            
-              
-                 <% if etotalh >= 5 %>
-                 <% night = "#{etotalh - 5} #{etotalm}" %>
-                 <% end %>
-               
+                 
+                <% if ots.stimehours <= 10 and ots.STAP == 'pm' %>
+
+                      <% if etotalh >= 5 %>
+                         <% evening = 5 %> 
+                         <% eveningh = eveningh + 5 %>
+                         <% nighth = nighth + etotalh - 5 %>
+                         <% night = "#{etotalh - 5} #{etotalm}" %>
+                      <% else %> 
+                         <% evening = "#{etotalh} #{etotalm}" %> 
+                         <% eveningh = eveningh + etotalh %>
+                      <% end %> 
+                  
+
+                <% elsif ots.stimehours > 10 || (ots.stimehours < 6 and ots.STAP == 'am') %>
+                    
+                      <% night = "#{etotalh} #{etotalm}" %>
+                      <% nighth = nighth + etotalh %>
+                
+                <% end %>
             <% else %>
-              <% weekendh = weekendh + etotalh %>
-              <% weekend = "#{etotalh} #{etotalm}" %>
+                  <% weekendh = weekendh + etotalh %>
+                  <% weekend = "#{etotalh} #{etotalm}" %>
+                  <% weekday = Date::DAYNAMES[date.to_date.wday] %>
             <% end %>
-            <% else %>
-                <% weekday = Date::DAYNAMES[date.to_date.wday] %>
-               
-               
 
         <% end %> 
 
-    <% end %>
+        <% end %>
+
+       
   <% end %>
+ 
   <tr>
     <td><%= i %></td>
     <td><%= weekday %></td>
-    <td><%= date %></td>
+    <td><%= date.to_date.strftime("%d-%b-%y") %></td>
     <td><%= range %></td>
     <td><% if etotalh !=0 %> <%= etotalh %> <% end %><% if etotalm != 0 %><%= etotalm %> <% end %></td>
     <td><%= evening %></td>
@@ -206,17 +219,42 @@
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      Total</td>
-      <td><%= totalh + totalm %></td>
-      <td><%= eveningh %></td>
-      <td><%= nighth + nightm %></td>
-      <td><%= weekendh + weekendm %></td>
+      <b>Total</b></td>
+
+      <td>
+          <% if (totalh + totalm) % 1 ==0 %>
+            <%= (totalh + totalm).to_i %>
+          <% else %>
+            <%= (totalh + totalm - 0.5).to_i %><%= ' 1/2' %>
+          <% end %>
+      </td>
+      <td>
+        <% if eveningh % 1 == 0 %>
+          <%= eveningh.to_i %>
+        <% else %>
+         <%= (eveningh - 0.5 ).to_i %><%= ' 1/2' %>
+        <% end %>
+      </td>
+      <td>
+        <% if (nighth + nightm) % 1 == 0 %>
+          <%= (nighth + nightm).to_i %>
+        <% else %>
+          <%= (nighth + nightm - 0.5 ).to_i %> <%= ' 1/2'%>
+        <% end %>
+      </td>
+      <td>
+          <% if (weekendh + weekendm) % 1 == 0 %>
+             <%= (weekendh + weekendm).to_i %>
+          <% else %>
+             <%= (weekendh + weekendm - 0.5 ).to_i %><%= ' 1/2' %>
+          <% end %>
+      </td>
       <td></td>
       <td></td>
       <td></td>
   </tr>
 </table>
-<br /><br />
-<p><b>Checked____________________________________</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Aproved By__________________________________________</b></p>
+<br /><br /><br /><br />
+<p><b>Checked____________________________________</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>Aproved By _________________________________________</b></p>
 </body>
 </html>

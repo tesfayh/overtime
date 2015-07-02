@@ -1,5 +1,7 @@
 class OvertimesController < ApplicationController
-	 before_filter :auth, only: [:create, :destroy, :edit, :update, :show, :report, :index, :showot, :new, :ot_report]
+	
+	 before_filter :auth, only: [:create, :destroy, :edit, :update, :show, :report, :index, :showot, :new, :otreport]
+	
 	def new
 		@overtime = Overtime.new
 		@user = User.all
@@ -7,7 +9,15 @@ class OvertimesController < ApplicationController
 
 	def index
 		@reports = Overtime.where(:user_id => current_user.id)
-
+		
+		 begin
+       		if params[:month]
+		 		@month = params[:month]
+			end
+		rescue =>e
+			@month = Time.now.month
+	        @error= e.message
+		end
 		respond_to do |format|
 	      format.html
 	      format.pdf do
@@ -15,20 +25,33 @@ class OvertimesController < ApplicationController
         	      :layout => false, 
         	       template: 'overtimes/index.pdf.erb',
         	       layout: 'pdf.html.erb',
+        	       title:  'Lion Bank OT System',
         	       disposition: 'inline'
       end
     end
     end
+
     def pdf
     	@reports = Overtime.where(:user_id => current_user.id)
 	end
-	def ot_report
+
+	def otreport
 		 @reports = Overtime.all
+		 begin
+       		if params['report']['month']
+		 		@month   = params['report']['month']
+			end
+		rescue =>e
+			@month = Time.now.month
+	        @error= e.message
+		end
+		 
 		 render 'overtime_report',:layout => false
 
 	end
+
 	def edit
-		@overtime = current_user.overtimes.find(params[:id])
+		@overtime = Overtime.find(params[:id])
 	end
 
 	def show
@@ -36,9 +59,10 @@ class OvertimesController < ApplicationController
 	end
 
     def showot
-    	@overtimes = Overtime.where(:user_id => current_user.id)
+    	@overtimes = Overtime.where(:user_id => current_user.id).order(:sdayofot).reverse_order
     	render 'showot'
     end
+
 	def update
 		@overtime = current_user.overtimes.find(params[:id])
 		@overtime.user_id = current_user.id
@@ -56,23 +80,35 @@ class OvertimesController < ApplicationController
 		@ot.destroy
 		redirect_to '/update', notice: "OT deleted successfuly!"
 	end
+
 	def report
 		@reports = Overtime.where(:user_id => current_user.id)
-		
+		begin
+       		if params['report']['month']
+		 		@month   = params['report']['month']
+			end
+		rescue =>e
+			@month = Time.now.month
+	        @error= e.message
+		end
 	end
+
 	def create
 		@overtime = Overtime.new(ot_params)
 		@overtime.user_id = current_user.id
 		if @overtime.save
 		    
-			#@overtime = Overtime.new(ot_params)
-			#user = User.select(:id).where(name: params[:userid][:name])
-			#@overtime.user_id = user.first.id
-		#if	@overtime.save	
-			redirect_to '/update', notice: "you have saved your OT! "
-	#	else
-	#		render 'new', notice: "error saving OT"
-	#	end
+			@overtime = Overtime.new(ot_params)
+			if	  params[:userid][:name] != ''
+				@overtime.user_id =  params[:userid][:name]
+				if	@overtime.save	
+					redirect_to '/update', notice: "you have saved your OT! "
+				else
+					redirect_to '/newot', notice: "OT for your partner is not added"
+				end
+			else
+				redirect_to '/update', notice: "you have saved your OT! "
+		    end
 		else
 		  redirect_to '/newot'
 		  flash[:error] = "error: Users should only enter one OT per day." 

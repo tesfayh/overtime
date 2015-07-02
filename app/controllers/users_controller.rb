@@ -7,7 +7,7 @@ class UsersController < ApplicationController
 		@user = User.new(user_params)
 		if @user.save
 			session[:user_id] = @user.id
-			redirect_to root_url, notice: "thank you for signing up for LIBOT!"
+			redirect_to '/newot', notice: "thank you for signing up for LIBOT and now you can add your OT"
 		else
 			render 'new'
 		end

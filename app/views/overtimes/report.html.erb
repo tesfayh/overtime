@@ -3,17 +3,30 @@
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
+
     }
     th, td {
         padding: 5px;
         text-align: left;
+    }
+    table {
+      width: 1180px
     }
 </style>
 
 <div class="content">
 <div class="wrapper">
 <div class="panel">
-	<p><u><%= link_to 'generate report pdf', overtimes_path(@reports, :format => 'pdf')%></u></p>
+	
+  <%= form_tag 'monthlyreport' do %>
+  OT Report for 
+ 
+  <%= select_month(14, :prompt=>t("date.month_names")[@month.to_i], field_name: 'month', :prefix => 'report')%>
+   
+  <%= submit_tag 'Get Report' %>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+<u><%= link_to 'Report as pdf', overtimes_path(@reports, :month =>@month.to_i, :format => 'pdf')%></u>
+<% end %>
  
 <table border="1" border-colapse="collapse">
   <tr>
@@ -56,25 +69,31 @@
     <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
     <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
 
-<% t1 = Time.parse(Time.now.to_s) %>
- <% days = Time.days_in_month(t1.month, t1.year) %>
+  <% t1 = Time.parse((Time.now ).to_s) %>
+  <% days = Time.days_in_month(@month.to_i, t1.year) %>
+<% if days %>
+<% else %>
+  <% @month = t1.month %>
+ <% days = Time.days_in_month(@month.to_i, t1.year) %>
+<% end %>
 <% for i in 1..days %>
        <% range = '' %>    <% etotalh = 0 %>    <% etotalm = 0 %>
        <% evening = '' %>  <% night = '' %>     <% weekend = '' %>
-        <% if i < 10 && t1.month < 10%>
-           <% date = "0#{i} - 0#{t1.month} - #{t1.year} " %>
-         <% elsif i < 10 %>
-             <% date = "0#{i} - #{t1.month} - #{t1.year} " %>
-          <% elsif t1.month < 10 %>
-             <% date = "#{i} - 0#{t1.month} - #{t1.year} " %>
+        <% if i < 10 && @month.to_i < 10%>
+           <% date = "0#{i}-0#{@month}-#{t1.year} " %>
+         <% elsif i < 10 && @month.to_i >= 10 %>
+             <% date = "0#{i}-#{@month}-#{t1.year} " %>
+          <% elsif @month.to_i >= 10 && i >= 10  %>
+             <% date = "#{i}-#{@month}-#{t1.year} " %>
+          <% elsif @month.to_i < 10 && i >= 10  %>
+            <% date = "#{i}-0#{@month}-#{t1.year} " %>
           <% end %>
-             <% date = date.to_date %>
-            <% date =  date.strftime("%d-%m-%Y") %>
+            <% date = (Date.parse(date)).strftime("%d-%m-%Y") %>
             <% weekday = Date::DAYNAMES[date.to_date.wday] %>
     <% @reports.each do |ots| %>
 
       <% t2 = Time.parse(ots.sdayofot.to_s) %>
-      <% if t2.month == t1.month %>
+      <% if t2.month == @month.to_i %>
         
         <% if t2.day == i %>
            
@@ -92,7 +111,7 @@
            <% end %>
           
            <% if ots.etimeminutes > 30 %>
-              <% etotalh = ots.etimehours +=1 %>
+              <% etotalh = ots.etimehours += 1  %>
            <% elsif ots.etimeminutes >= 15 %>
 
               <% etotalh = ots.etimehours  %>
@@ -111,13 +130,16 @@
             <% if etotalm==0 %>
               <% etotalm = '' %>
             <% end %>
-            <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
-            
+            <% if ots.etimehours > 12 %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours % 12} #{etotalm} #{ots.STAP}" %>
+             <% else %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
+              <% end %>
                <!-- total number of hours worked -->
            
-                <% if ots.ETAP != ots.STAP %>
-                  <% etotalh = etotalh + 12 - stotalh  %>
-                  
+                <% if ots.ETAP != ots.STAP  && etotalh < 12%>
+                  <% etotalh = (etotalh + 12 - stotalh)  %>
+                                 
                 <% else %>
                    <% etotalh = etotalh - stotalh %> 
                    
@@ -127,27 +149,33 @@
                 <% totalh = totalh + etotalh %>
             <% if (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Saturday') !=0 &&
                   (Date::DAYNAMES[ots.sdayofot.wday]).casecmp('Sunday') !=0 %>
-                  <% eveningh = eveningh + 5 %>
-                  <% nighth = nighth + etotalh - 5 %>
+                  
                  
-            
-                <% if etotalh >= 5 %> <% evening = 5 %> 
-                <% else %> <% evening = "#{etotalh} #{etotalm}" %> 
-                <% end %> 
-            
-              
-                 <% if etotalh >= 5 %>
-                 <% night = "#{etotalh - 5} #{etotalm}" %>
-                 <% end %>
-               
+                 
+                <% if ots.stimehours <= 10 and ots.STAP == 'pm' %>
+
+                      <% if etotalh >= 5 %>
+                         <% evening = 5 %> 
+                         <% eveningh = eveningh + 5 %>
+                         <% nighth = nighth + etotalh - 5 %>
+                         <% night = "#{etotalh - 5} #{etotalm}" %>
+                      <% else %> 
+                         <% evening = "#{etotalh} #{etotalm}" %> 
+                         <% eveningh = eveningh + etotalh %>
+                      <% end %> 
+                  
+
+                <% elsif ots.stimehours > 10 || (ots.stimehours < 6 and ots.STAP == 'am') %>
+                    
+                      <% night = "#{etotalh} #{etotalm}" %>
+                      <% nighth = nighth + etotalh %>
+                
+                <% end %>
             <% else %>
-              <% weekendh = weekendh + etotalh %>
-              <% weekend = "#{etotalh} #{etotalm}" %>
+                  <% weekendh = weekendh + etotalh %>
+                  <% weekend = "#{etotalh} #{etotalm}" %>
+                  <% weekday = Date::DAYNAMES[date.to_date.wday] %>
             <% end %>
-            <% else %>
-               
-               
-               
 
         <% end %> 
 
@@ -155,11 +183,11 @@
 
        
   <% end %>
-   <% weekday = Date::DAYNAMES[date.to_date.wday] %>
+ 
   <tr>
     <td><%= i %></td>
     <td><%= weekday %></td>
-    <td><%= date %></td>
+    <td><%= date.to_date.strftime("%d-%b-%y") %></td>
     <td><%= range %></td>
     <td><% if etotalh !=0 %> <%= etotalh %> <% end %><% if etotalm != 0 %><%= etotalm %> <% end %></td>
     <td><%= evening %></td>
@@ -176,10 +204,35 @@
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
       Total</td>
-      <td><%= totalh + totalm %></td>
-      <td><%= eveningh %></td>
-      <td><%= nighth + nightm %></td>
-      <td><%= weekendh + weekendm %></td>
+
+      <td>
+          <% if (totalh + totalm) % 1 ==0 %>
+            <%= (totalh + totalm).to_i %>
+          <% else %>
+            <%= (totalh + totalm - 0.5).to_i %><%= ' 1/2' %>
+          <% end %>
+      </td>
+      <td>
+        <% if eveningh % 1 == 0 %>
+          <%= eveningh.to_i %>
+        <% else %>
+         <%= (eveningh - 0.5 ).to_i %><%= ' 1/2' %>
+        <% end %>
+      </td>
+      <td>
+        <% if (nighth + nightm) % 1 == 0 %>
+          <%= (nighth + nightm).to_i %>
+        <% else %>
+          <%= (nighth + nightm - 0.5 ).to_i %> <%= ' 1/2'%>
+        <% end %>
+      </td>
+      <td>
+          <% if (weekendh + weekendm) % 1 == 0 %>
+             <%= (weekendh + weekendm).to_i %>
+          <% else %>
+             <%= (weekendh + weekendm - 0.5 ).to_i %><%= ' 1/2' %>
+          <% end %>
+      </td>
       <td></td>
       <td></td>
       <td></td>

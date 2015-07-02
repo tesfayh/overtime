@@ -3,7 +3,7 @@ class Overtime < ActiveRecord::Base
 
 	belongs_to :user
 	
-	validates :sdayofot, presence: true, uniqueness: true # => { :scope => :user_id,
-    #:message => "Users should only enter one OT per  day." }
+	validates :sdayofot, presence: true, :uniqueness => { :scope => :user_id,
+    :message => "Users should only enter one OT per  day." }
 	
 end

@@ -145,11 +145,15 @@
             <% if etotalm==0 %>
               <% etotalm = '' %>
             <% end %>
-            <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
+            <% if ots.etimehours > 12 %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours % 12} #{etotalm} #{ots.STAP}" %>
+             <% else %>
+                <% range = "#{ots.stimehours} #{ots.ETAP} - #{ots.etimehours} #{etotalm} #{ots.STAP}" %>
+              <% end %>
             
                <!-- total number of hours worked -->
            
-                <% if ots.ETAP != ots.STAP %>
+                <% if ots.ETAP != ots.STAP && etotalh < 12 %>
                   <% etotalh = etotalh + 12 - stotalh  %>
                   
                 <% else %>
